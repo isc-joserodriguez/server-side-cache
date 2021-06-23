@@ -17,12 +17,14 @@ app.get('/', (req, res) => {
 
 app.get('/api/search', cache(10), async (req, res) => {
     let { query } = req.query;
+    query = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     if (!query) {
         res.status(400).json({ error: 'Query not found' });
         return;
     }
     try {
-        const { results } = await fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${query}`).then(res => res.json());
+        const products = await fetch(`https://api.mercadolibre.com/sites/MLA/search?q=${query}`)
+        const { results } = await products.json();
         res.status(200).json({ results });
     } catch (e) {
         res.status(400).json({ error: 'Error' });
