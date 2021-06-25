@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/search', cache(10), async (req, res) => {
     let { query } = req.query;
-    query = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    query = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (!query) {
         res.status(400).json({ error: 'Query not found' });
         return;
